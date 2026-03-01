@@ -97,9 +97,10 @@ void loop() {
     }
   }
 
-  // Read keyboard input
+  // Read keyboard input — ignore non-printable bytes (serial noise)
   if (Serial.available()) {
     char c = Serial.read();
+    if (c < ' ' || c > '~') return;
     if (c >= '1' && c <= '4') {
       fire(c - '1');
     } else if (c == 's' || c == 'S') {

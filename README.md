@@ -141,12 +141,12 @@ Host                          Board
 
 ## Build Environments
 
-The project has two build targets:
-
 | Environment  | Command                              | Description                        |
 |--------------|--------------------------------------|------------------------------------|
-| `esp32dev`   | `pio run -t upload`                  | Production firmware (full protocol)|
+| `esp32dev`   | `pio run -e esp32dev -t upload`      | Production firmware (full protocol)|
 | `test_fire`  | `pio run -e test_fire -t upload`     | Manual fire test (keyboard input)  |
+| `timer`      | `pio run -e timer -t upload`         | Timed auto-fire (2-channel, no serial) |
+| `test_cycle` | `pio run -e test_cycle -t upload`    | GPIO cycle test (2-channel)        |
 
 ### Manual Fire Test
 
@@ -167,3 +167,16 @@ Controls:
 | `r`   | Reset all channels (allows re-firing)       |
 
 Channels are one-shot per cycle — once fired, press `r` to reset before firing again. Only one channel can fire at a time (wait for the 500ms pulse to finish).
+
+### Timer Auto-Fire
+
+Standalone 2-channel build (GPIO 16, 18) with no serial I/O. Fires on a fixed schedule from boot:
+
+- **8 minutes** → GPIO 16 (500ms pulse)
+- **13 minutes** → GPIO 18 (500ms pulse)
+
+Edit `FIRE_DELAY_MS` in `src/timer.cpp` to change the delays.
+
+### GPIO Cycle Test
+
+2-channel build (GPIO 16, 18) that cycles each pin HIGH for 2 seconds in a loop. Starts automatically on boot. Press `x` to stop, `g` to restart.
