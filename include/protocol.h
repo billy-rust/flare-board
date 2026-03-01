@@ -101,6 +101,8 @@ void processCommand(const char* cmd) {
 void readSerial() {
   while (Serial.available()) {
     char c = Serial.read();
+    // Drop non-printable, non-terminator bytes (serial noise)
+    if (c != '\n' && c != '\r' && (c < ' ' || c > '~')) continue;
     if (c == '\n' || c == '\r') {
       if (cmdPos > 0) {
         cmdBuffer[cmdPos] = '\0';
